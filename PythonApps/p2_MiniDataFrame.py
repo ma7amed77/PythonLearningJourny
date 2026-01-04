@@ -35,19 +35,18 @@ def get_Mean(data, column):
         return None
     return mean
 
-#older implemntation
-def group_count(data, column):
-    result = {}
+def save_CSV(data, path):
+    header = list(data[0].keys())
+    lines = []
+    lines.append(",".join(header))
     for row in data:
-        if row[column] in result:
-            result[row[column]] += 1
-        else:
-            result[row[column]] = 1
-    return result
+        lines.append(",".join([str(row[k]) for k in header]))
+        
+    with open(path, 'w') as f:
+        f.write("\n".join(lines))
 
 #currently I don't know what does group by exactly do
 #but this is more for learning data structer so it's good for now
-
 class Group:
     def __init__(self, data, columns):
         self.group = {}
@@ -66,6 +65,7 @@ class Group:
 
 # Testing
 data = load_CSV('data/testCSV.csv')
+save_CSV(select_column(sort_data(data, "name"),'name','id'), 'data/testOutCSV.csv')
 #print(select_column(sort_data(data, "name"),'name')) ##print column of sorted Names
 #print(get_Mean(data,"age")) print mean of age
 #print(Group(data, ['city','age', 'name']).group) #print grouped data
